@@ -32,6 +32,8 @@ public class ManageStudentsForm extends javax.swing.JFrame {
         tModel.setColumnIdentifiers(new String[]{"Name","Major"});
         
         tblStudents.setModel(tModel);
+        
+        tblStudents.setDefaultEditor(Object.class, null);
     }
 
     /**
@@ -54,6 +56,7 @@ public class ManageStudentsForm extends javax.swing.JFrame {
         btnAddNew = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         btnSort = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,7 +78,22 @@ public class ManageStudentsForm extends javax.swing.JFrame {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblStudents.setRowSelectionAllowed(true);
+        tblStudents.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblStudents.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblStudentsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblStudents);
 
         btnAddNew.setText("Add New");
@@ -91,6 +109,8 @@ public class ManageStudentsForm extends javax.swing.JFrame {
                 btnSortActionPerformed(evt);
             }
         });
+
+        jButton1.setText("jButton1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,7 +140,9 @@ public class ManageStudentsForm extends javax.swing.JFrame {
                                 .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(150, 150, 150)
-                                .addComponent(btnAddNew)))
+                                .addComponent(btnAddNew)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -149,7 +171,9 @@ public class ManageStudentsForm extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(cbxMajor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAddNew)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddNew)
+                    .addComponent(jButton1))
                 .addGap(9, 9, 9)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -182,6 +206,21 @@ public class ManageStudentsForm extends javax.swing.JFrame {
         tModel.fireTableDataChanged();
     }//GEN-LAST:event_btnSortActionPerformed
 
+    private void tblStudentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStudentsMouseClicked
+        showDetail();
+        
+        System.out.println("Mouserssss");
+    }//GEN-LAST:event_tblStudentsMouseClicked
+
+    private void showDetail(){
+        int selectedRow = tblStudents.getSelectedRow();
+        System.out.println(selectedRow);
+        Student s = list.get(selectedRow);
+        
+        txtName.setText(s.getName());
+        cbxMajor.setSelectedItem(s.getMajor());
+    }
+    
     private void addStudent() {
         Student student = new Student();
         student.setMajor(cbxMajor.getSelectedItem().toString());
@@ -234,6 +273,7 @@ public class ManageStudentsForm extends javax.swing.JFrame {
     private javax.swing.JButton btnAddNew;
     private javax.swing.JButton btnSort;
     private javax.swing.JComboBox<String> cbxMajor;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
